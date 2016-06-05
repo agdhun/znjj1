@@ -224,13 +224,13 @@
 
 		$("#changedair").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"air_c_temp":' + document.getElementsByName(air_temp) + '}';
+			var commond = '{"air_c_temp":' + document.getElementsByName(air_temp).value + '}';
             client.publish(topic, commond);
         });
         
 		$("#changedcur").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"curtain":' + document.getElementsById(curtain) + '}';
+			var commond = '{"curtain":' + document.getElementsById(curtain).value + '}';
             client.publish(topic, commond);
         });
     }
