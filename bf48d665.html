@@ -1,9 +1,9 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>设备联动</title>
+    <title>智能家居</title>
     <style>
         *{margin:0px;padding:0px;}
         body{
@@ -79,6 +79,8 @@
                     <td valign="middle" align="left">&nbsp;&nbsp;<span>温度</span><br/>&nbsp;&nbsp;<span class="tempcls" id="tempid">28℃</span></td>
                     <td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
                     <td valign="middle" align="left">&nbsp;&nbsp;<span>湿度</span><br/>&nbsp;&nbsp;<span class="humicls" id="humiid">42%</span></td>
+					<td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
+                    <td valign="middle" align="left">&nbsp;&nbsp;<span>光照强度</span><br/>&nbsp;&nbsp;<span class="humicls" id="lightid">1342</span></td>
                 </tr>
             </table>
         </div>        
@@ -87,7 +89,16 @@
                 <tr align="center" height="114px">
                     <td valign="middle"><img id="switchbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="switchspan">开</span></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><img id="rgbimgid" src="./image/02-red.svg" alt=""><br/><span>温度阀值</span></td>
+                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span>门已关</span></td>
+                </tr>                
+            </table>
+        </div>
+		<div class="control">
+            <table width="100%">
+                <tr align="center" height="114px">
+                    <td valign="middle"><input type="Number" name="air_temp" min="10" max="30" id="airbtn"><br/><button id="changedair">空调设定</button></td>
+                    <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
+                    <td valign="middle"><input type="range" name="points" min="0" max="2"><br/><button id="changedcur">窗帘设定</button></td>
                 </tr>                
             </table>
         </div>
@@ -179,17 +190,18 @@
                 $("#tempid").text(tempval+"℃");
                 // 显示湿度
                 $("#humiid").text(msgjson.dht11_humidity+'%');
+				$("#lightid").text(msgjson.light_s);
                 // 温度超过29则红灯亮，20-29之间则绿灯亮，低于20黄灯亮
-                if(tempval > "29"){
-                    led_red();
-                    $("#rgbimgid").attr("src", "./image/02-red.svg");
-                }else if(tempval < "30" && (tempval > "19")){
-                    led_green();
-                    $("#rgbimgid").attr("src", "./image/02-green.svg");
-                }else if(tempval < "20"){
-                    led_yellow();
-                    $("#rgbimgid").attr("src", "./image/02-yellow.svg");
-                }
+                //if(tempval > "29"){
+                //    led_red();
+                //    $("#rgbimgid").attr("src", "./image/02-red.svg");
+                //}else if(tempval < "30" && (tempval > "19")){
+                //    led_green();
+                //    $("#rgbimgid").attr("src", "./image/02-green.svg");
+                //}else if(tempval < "20"){
+                //    led_yellow();
+                //    $("#rgbimgid").attr("src", "./image/02-yellow.svg");
+                //}
             }
         }
 
@@ -210,6 +222,14 @@
             client.publish(topic, commond);
         });
 
+		$("#changedair").click(function() {
+			var topic = device_id+'/in';
+            var commond;
+            var swtimg = $("#changedair").attr("src");
+            if("./image/03-turn-on.svg" == swtimg){
+                commond = '{"device_switch":false}';
+            client.publish(topic, commond);
+        });
         function led_red() {
             var topic = device_id+'/in';
             var commond = '{"rgbled_switch":true,"rgbled_hues":0, "rgbled_saturation":100, "rgbled_brightness":100}'; 
