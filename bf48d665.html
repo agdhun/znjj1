@@ -224,14 +224,14 @@
 
 		$("#changedair").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"air_c_temp":' + document.getElementById(air_temp).value + '}';
+			var commond = '{"air_c_temp":' + document.getElementById("air_temp").value + '}';
             client.publish(topic, commond);
 			alert(commond);
         });
         
 		$("#changedcur").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"curtain":' + document.getElementById(curtain).value + '}';
+			var commond = '{"curtain":' + document.getElementById("curtain").value + '}';
             client.publish(topic, commond);
         });
     }
