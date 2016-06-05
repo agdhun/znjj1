@@ -98,7 +98,7 @@
                 <tr align="center" height="114px">
                     <td valign="middle"><input type="Number" name="air_temp" min="10" max="30" id="airbtn"><br/><button id="changedair">空调设定</button></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><input type="range" name="points" min="0" max="2"><br/><button id="changedcur">窗帘设定</button></td>
+                    <td valign="middle"><input type="range" name="points" min="0" max="2" id='curtain'><br/><button id="changedcur">窗帘设定</button></td>
                 </tr>                
             </table>
         </div>
@@ -211,11 +211,11 @@
             var commond;
             var swtimg = $("#switchbtn").attr("src");
             if("./image/03-turn-on.svg" == swtimg){
-                commond = '{"device_switch":false}';
+                commond = '{"rgbled_switch":false}';
                 $("#switchbtn").attr("src", "./image/03-turn-off.svg");
                 $("#switchspan").text("关");
             }else{
-                commond = '{"device_switch":true}';
+                commond = '{"rgbled_switch":true}';
                 $("#switchbtn").attr("src", "./image/03-turn-on.svg");
                 $("#switchspan").text("开");
             }
@@ -224,29 +224,15 @@
 
 		$("#changedair").click(function() {
 			var topic = device_id+'/in';
-            var commond;
-            var swtimg = $("#changedair").attr("src");
-            if("./image/03-turn-on.svg" == swtimg){
-                commond = '{"device_switch":false}';
+			var commond = '{"air_c_temp":' + document.getElementsByName(air_temp) + '}';
             client.publish(topic, commond);
         });
-        function led_red() {
-            var topic = device_id+'/in';
-            var commond = '{"rgbled_switch":true,"rgbled_hues":0, "rgbled_saturation":100, "rgbled_brightness":100}'; 
+        
+		$("#changedcur").click(function() {
+			var topic = device_id+'/in';
+			var commond = '{"curtain":' + document.getElementsById(curtain) + '}';
             client.publish(topic, commond);
-        }
-
-        function led_green() {
-            var topic = device_id+'/in';
-            var commond = '{"rgbled_switch":true,"rgbled_hues":120, "rgbled_saturation":100, "rgbled_brightness":100}'; 
-            client.publish(topic, commond);
-        }
-
-        function led_yellow() {
-            var topic = device_id+'/in';
-            var commond = '{"rgbled_switch":true,"rgbled_hues":60, "rgbled_saturation":100, "rgbled_brightness":100}'; 
-            client.publish(topic, commond);
-        }
+        });
     }
 
     // 日志打印在页面的部分    
