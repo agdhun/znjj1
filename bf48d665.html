@@ -24,20 +24,20 @@
             box-shadow: 3px 3px 3px #e1e1e1;
         }
         .title span{
-            color: #000000;
-            /*color: #229B32;*/
+           /* color: #000000;*/
+            color: #229B32;
             font-size: 18px;
             /*font-weight: bolder;*/
             position: relative;
         }
-        .temphumishow{
+        .tehulishow{
             margin: 5px 12px;
             height: 94px;
             background-color: #FFFFFF;
             text-align: center;
             box-shadow: 3px 3px 3px #e1e1e1;
         }
-        .temphumishow table tr td img{
+        .tehulishow table tr td img{
             height: 50px;
         }
         .tempcls{
@@ -48,14 +48,18 @@
             font-size: 30px;
             color: #80a72d; 
         }
-        .switrgbhow{
+		.ligtcls{
+            font-size: 30px;
+            color: #87CEEB; 
+        }
+        .swictl{
             margin: 5px 12px;
             height: 114px;
             background-color: #FFFFFF;
             text-align: center;
             box-shadow: 3px 3px 3px #e1e1e1;
         }        
-        .switrgbhow table tr td img{
+        .swictl table tr td img{
             height: 70px;
         }
         .humihis{
@@ -65,49 +69,53 @@
             text-align: center;
             box-shadow: 3px 3px 3px #e1e1e1;
         }
+		.air_temp{
+            font-size: 30px;
+            color: #e13e4e; 
+        }
+		.aircurctl{
+            margin: 5px 12px;
+            height: 144px;
+            background-color: #FFFFFF;
+            text-align: center;
+            box-shadow: 3px 3px 3px #e1e1e1;
+        }        
+        .aircurctl table tr td img{
+            height: 70px;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <div class="title">
-          <span>温湿度实时检测</span>
+          <span>互联网+智能家居系统</span>
         </div>        
-        <div class="temphumishow">
-            <table width="100%" height="188px">
+        <div class="tehulishow">
+            <table width="100%" height="94px">
                 <tr align="center">
-                    <td valign="middle" align="right"><img src="./image/01-temperature.svg" alt=""></td>
-                    <td valign="middle" align="left">&nbsp;&nbsp;<span>温度</span><br/>&nbsp;&nbsp;<span class="tempcls" id="tempid">28℃</span></td>
-                    <td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
-                    <td valign="middle" align="left">&nbsp;&nbsp;<span>湿度</span><br/>&nbsp;&nbsp;<span class="humicls" id="humiid">42%</span></td>
+                    <td valign="middle">&nbsp;&nbsp;<span>温度</span><br/>&nbsp;&nbsp;<span class="tempcls" id="tempid">28℃</span></td>
+                    <td valign="middle">&nbsp;&nbsp;<span>湿度</span><br/>&nbsp;&nbsp;<span class="humicls" id="humiid">42%</span></td>
+					<td valign="middle">&nbsp;&nbsp;<span>光强</span><br/>&nbsp;&nbsp;<span class="ligtcls" id="lighid">1342</span></td>
                 </tr>
-				<tr>
-					<td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
-                    <td valign="middle" align="left">&nbsp;&nbsp;<span>光强度</span><br/>&nbsp;&nbsp;<span class="humicls" id="lightid">1342</span></td>
-				</tr>
             </table>
         </div>        
-        <div class="switrgbhow">
+        <div class="swictl">
             <table width="100%">
                 <tr align="center" height="114px">
-                    <td valign="middle"><img id="switchbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="switchspan">开</span></td>
+                    <td valign="middle"><img id="rgbledbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="rgbledspan">灯亮</span></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="doorspan">门已关</span></td>
+                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="doorspan">门开了</span></td>
                 </tr>                
             </table>
         </div>
-		<div class="control">
+		<div class="aircurctl">
             <table width="100%">
                 <tr align="center" height="114px">
-                    <td valign="middle"><input type="Number" min="10" max="30" id="air_temp"><br/><button id="changedair">空调设定</button></td>
-                    <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><input type="range" min="0" max="2" id='curtain'><br/><button id="changedcur">窗帘设定</button></td>
+                    <td valign="middle"><span id="air_temp">28</span>℃<br /><img id="air_add" src="./image/03-turn-on.svg" alt=""><img id="air_del" src="./image/03-turn-on.svg" alt=""></td>
+                    <td valign="middle"><img id="curtain_img" src="./image/03-turn-on.svg" alt=""><br /><input type="range" min="0" max="2" id='curtain' onChange="cur_changed()"><br/><span id="curspan">窗帘已关</span></td>
                 </tr>                
             </table>
         </div>
-        <!-- <div class="humihis">
-            <div id="device_id"></div>
-            <div id="debug"></div>
-        </div> -->
     </div>
 </div>
 <script src="./js/mqttws31.js"></script>
@@ -193,37 +201,27 @@
                 // 显示湿度
                 $("#humiid").text(msgjson.dht11_humidity+'%');
 				$("#lightid").text(msgjson.light_s);
-                // 温度超过29则红灯亮，20-29之间则绿灯亮，低于20黄灯亮
-                //if(tempval > "29"){
-                //    led_red();
-                //    $("#rgbimgid").attr("src", "./image/02-red.svg");
-                //}else if(tempval < "30" && (tempval > "19")){
-                //    led_green();
-                //    $("#rgbimgid").attr("src", "./image/02-green.svg");
-                //}else if(tempval < "20"){
-                //    led_yellow();
-                //    $("#rgbimgid").attr("src", "./image/02-yellow.svg");
-                //}
             }
         }
 
-        // 控制按钮显示的事件
-        $("#switchbtn").click(function() {
+        // 灯亮灭
+        $("#rgbledbtn").click(function() {
             var topic = device_id+'/in';
             var commond;
-            var swtimg = $("#switchbtn").attr("src");
+            var swtimg = $("#rgbledbtn").attr("src");
             if("./image/03-turn-on.svg" == swtimg){
                 commond = '{"rgbled_switch":false}';
-                $("#switchbtn").attr("src", "./image/03-turn-off.svg");
-                $("#switchspan").text("关");
+                $("#rgbledbtn").attr("src", "./image/03-turn-off.svg");
+                $("#rgbledspan").text("灯灭");
             }else{
                 commond = '{"rgbled_switch":true}';
-                $("#switchbtn").attr("src", "./image/03-turn-on.svg");
-                $("#switchspan").text("开");
+                $("#rgbledbtn").attr("src", "./image/03-turn-on.svg");
+                $("#rgbledspan").text("灯亮");
             }
             client.publish(topic, commond);
         });
 
+		//门开关
 		$("#doorbtn").click(function() {
             var topic = device_id+'/in';
             var commond;
@@ -231,49 +229,57 @@
             if("./image/03-turn-on.svg" == swtimg){
                 commond = '{"door":false}';
                 $("#doorbtn").attr("src", "./image/03-turn-off.svg");
-                $("#doorspan").text("门已关");
+                $("#doorspan").text("门关了");
             }else{
                 commond = '{"door":true}';
                 $("#doorbtn").attr("src", "./image/03-turn-on.svg");
-                $("#doorspan").text("门已开开");
+                $("#doorspan").text("门开了");
             }
             client.publish(topic, commond);
         });
 
-		$("#changedair").click(function() {
+		//空调加
+		$("#air_add").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"air_c_temp":' + document.getElementById("air_temp").value + '}';
+			var commond = '{"air_add":1}';
+			var num = parseInt(document.getElementById("air_temp").value) + 1;
+			$("#air_temp").text(num);
             client.publish(topic, commond);
         });
-        
-		$("#changedcur").click(function() {
+		
+        //空调减
+		$("#air_del").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"curtain":' + document.getElementById("curtain").value + '}';
+			var commond = '{"air_del":1}';
+			var num = parseInt(document.getElementById("air_temp").value) - 1;
+			$("#air_temp").text(num);
+            client.publish(topic, commond);
+        });
+		
+		//窗帘控制
+		function cur_changed(){
+			var swtimg = $("#curtain_img").attr("src");
+			var n = document.getElementById("curtain").value;
+			if(n == 0)
+			{
+				$("#curtain_img").attr("src", "./image/02-red.svg");
+                $("#curspan").text("窗户闭合");
+			}
+			else if(n == 1)
+			{
+				$("#curtain_img").attr("src", "./image/02-green.svg");
+                $("#curspan").text("窗户闭合一半");
+			}
+			else
+			{
+				$("#curtain_img").attr("src", "./image/02-yellow.svg");
+                $("#curspan").text("窗户开着");
+			}
+			var topic = device_id+'/in';
+			var commond = '{"curtain":' + n + '}';
             client.publish(topic, commond);
         });
     }
-
-    // 日志打印在页面的部分    
-    // var i = 0;
-    // console.log = (function(old_funct, div_log) {
-    //     return function(text) {
-    //         old_funct(text);
-    //         var p = '';
-    //         if (i%2 == 0)
-    //             p = '<p>';
-    //         else
-    //             p = '<p class=\'gray\'>';
-
-    //         if (typeof text === "object")
-    //             div_log.innerHTML += p + JSON.stringify(text) + '</p>';
-    //         else
-    //             div_log.innerHTML += p + text + '</p>';
-
-    //         div_log.scrollTop = div_log.scrollHeight;
-    //         i += 1;
-    //     };
-    // } (console.log.bind(console), document.getElementById("debug")));
-    // console.error = console.debug = console.info =  console.log;
 
 </script>
 </body>
