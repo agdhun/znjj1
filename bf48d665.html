@@ -73,15 +73,17 @@
           <span>温湿度实时检测</span>
         </div>        
         <div class="temphumishow">
-            <table width="100%" height="94px">
+            <table width="100%" height="188px">
                 <tr align="center">
                     <td valign="middle" align="right"><img src="./image/01-temperature.svg" alt=""></td>
                     <td valign="middle" align="left">&nbsp;&nbsp;<span>温度</span><br/>&nbsp;&nbsp;<span class="tempcls" id="tempid">28℃</span></td>
                     <td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
                     <td valign="middle" align="left">&nbsp;&nbsp;<span>湿度</span><br/>&nbsp;&nbsp;<span class="humicls" id="humiid">42%</span></td>
+                </tr>
+				<tr>
 					<td valign="middle" align="right"><img src="./image/01-humidity.svg" alt=""></td>
                     <td valign="middle" align="left">&nbsp;&nbsp;<span>光强度</span><br/>&nbsp;&nbsp;<span class="humicls" id="lightid">1342</span></td>
-                </tr>
+				</tr>
             </table>
         </div>        
         <div class="switrgbhow">
@@ -89,7 +91,7 @@
                 <tr align="center" height="114px">
                     <td valign="middle"><img id="switchbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="switchspan">开</span></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span>门已关</span></td>
+                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="doorspan">门已关</span></td>
                 </tr>                
             </table>
         </div>
@@ -222,11 +224,26 @@
             client.publish(topic, commond);
         });
 
+		$("#doorbtn").click(function() {
+            var topic = device_id+'/in';
+            var commond;
+            var swtimg = $("#doorbtn").attr("src");
+            if("./image/03-turn-on.svg" == swtimg){
+                commond = '{"door":false}';
+                $("#doorbtn").attr("src", "./image/03-turn-off.svg");
+                $("#doorspan").text("门已关");
+            }else{
+                commond = '{"door":true}';
+                $("#doorbtn").attr("src", "./image/03-turn-on.svg");
+                $("#doorspan").text("门已开开");
+            }
+            client.publish(topic, commond);
+        });
+
 		$("#changedair").click(function() {
 			var topic = device_id+'/in';
 			var commond = '{"air_c_temp":' + document.getElementById("air_temp").value + '}';
             client.publish(topic, commond);
-			alert(commond);
         });
         
 		$("#changedcur").click(function() {
