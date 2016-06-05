@@ -96,9 +96,9 @@
 		<div class="control">
             <table width="100%">
                 <tr align="center" height="114px">
-                    <td valign="middle"><input type="Number" name="air_temp" min="10" max="30" id="airbtn"><br/><button id="changedair">空调设定</button></td>
+                    <td valign="middle"><input type="Number" min="10" max="30" id="air_temp"><br/><button id="changedair">空调设定</button></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><input type="range" name="points" min="0" max="2" id='curtain'><br/><button id="changedcur">窗帘设定</button></td>
+                    <td valign="middle"><input type="range" min="0" max="2" id='curtain'><br/><button id="changedcur">窗帘设定</button></td>
                 </tr>                
             </table>
         </div>
@@ -224,13 +224,14 @@
 
 		$("#changedair").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"air_c_temp":' + document.getElementsByName(air_temp).value + '}';
+			var commond = '{"air_c_temp":' + document.getElementById(air_temp).value + '}';
             client.publish(topic, commond);
+			alert(commond);
         });
         
 		$("#changedcur").click(function() {
 			var topic = device_id+'/in';
-			var commond = '{"curtain":' + document.getElementsById(curtain).value + '}';
+			var commond = '{"curtain":' + document.getElementById(curtain).value + '}';
             client.publish(topic, commond);
         });
     }
