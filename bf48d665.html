@@ -102,17 +102,17 @@
         <div class="swictl">
             <table width="100%">
                 <tr align="center" height="114px">
-                    <td valign="middle"><img id="rgbledbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="rgbledspan">灯亮</span></td>
+                    <td valign="middle"><img id="rgbledbtn" src="./image/lightoff.png" alt=""><br/><span id="rgbledspan">灯灭</span></td>
                     <!-- <td valign="middle"><hr class="hrline" size="80" /></td> -->
-                    <td valign="middle"><img id="doorbtn" src="./image/03-turn-on.svg" alt=""><br/><span id="doorspan">门开了</span></td>
+                    <td valign="middle"><img id="doorbtn" src="./image/dooroff.png" alt=""><br/><span id="doorspan">门关了</span></td>
                 </tr>                
             </table>
         </div>
 		<div class="aircurctl">
             <table width="100%">
                 <tr align="center" height="114px">
-                    <td valign="middle"><span id="air_temp" class="air_temp">28</span><span class="air_temp">℃</span><br /><img id="air_add" src="./image/03-turn-on.svg" alt=""><img id="air_del" src="./image/03-turn-on.svg" alt=""></td>
-                    <td valign="middle"><img id="curtain_img" src="./image/03-turn-on.svg" alt=""><br />
+                    <td valign="middle"><span id="air_temp" class="air_temp">28</span><span class="air_temp">℃</span><br /><img id="air_add" src="./image/air_add.png" alt=""><img id="air_del" src="./image/air_del.png" alt=""></td>
+                    <td valign="middle"><img id="curtain_img" src="./image/curtain0.png" alt=""><br />
 									<select name="curtain" id="curtain">
 										<option value="0" selected="selected">窗户闭合</option>
 										<option value="1">窗户闭合一半</option>
@@ -123,7 +123,7 @@
             </table>
         </div>
     </div>
-	<h1>Verion 0.4</h1>
+	<div valign="boyttom" align="center"><h1>Verion 0.5</h1></div>
 </div>
 <script src="./js/mqttws31.js"></script>
 <script src="./js/jquery-2.1.3.js"></script>
@@ -219,11 +219,11 @@
             var swtimg = $("#rgbledbtn").attr("src");
             if("./image/03-turn-on.svg" == swtimg){
                 commond = '{"rgbled_switch":false}';
-                $("#rgbledbtn").attr("src", "./image/03-turn-off.svg");
+                $("#rgbledbtn").attr("src", "./image/lightoff.png");
                 $("#rgbledspan").text("灯灭");
             }else{
                 commond = '{"rgbled_switch":true}';
-                $("#rgbledbtn").attr("src", "./image/03-turn-on.svg");
+                $("#rgbledbtn").attr("src", "./image/lighton.png");
                 $("#rgbledspan").text("灯亮");
             }
             client.publish(topic, commond);
@@ -234,13 +234,13 @@
             var topic = device_id+'/in';
             var commond;
             var swtimg = $("#doorbtn").attr("src");
-            if("./image/03-turn-on.svg" == swtimg){
+            if("./image/dooron.png" == swtimg){
                 commond = '{"door":false}';
-                $("#doorbtn").attr("src", "./image/03-turn-off.svg");
+                $("#doorbtn").attr("src", "./image/dooroff.png");
                 $("#doorspan").text("门关了");
             }else{
                 commond = '{"door":true}';
-                $("#doorbtn").attr("src", "./image/03-turn-on.svg");
+                $("#doorbtn").attr("src", "./image/dooron.png");
                 $("#doorspan").text("门开了");
             }
             client.publish(topic, commond);
@@ -274,17 +274,17 @@
 			var value = obj.options[index].value; // 选中值
 			if(value == 0)
 			{
-				$("#curtain_img").attr("src", "./image/02-red.svg");
+				$("#curtain_img").attr("src", "./image/curtain0.png");
 				commond = '{"curtain": 0}';
 			}
 			else if(value == 1)
 			{
-				$("#curtain_img").attr("src", "./image/02-green.svg");
+				$("#curtain_img").attr("src", "./image/curtain1.png");
 				commond = '{"curtain": 1}';
 			}
 			else
 			{
-				$("#curtain_img").attr("src", "./image/02-yellow.svg");
+				$("#curtain_img").attr("src", "./image/curtain2.png");
 				commond = '{"curtain": 2}';
 			}
             client.publish(topic, commond);
